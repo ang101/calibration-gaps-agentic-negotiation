@@ -85,6 +85,48 @@ This probes whether self-assessment prompt reactivity inflates observed
 Phase 2 calibration gap shifts. One within-persona and one cross-persona
 pairing are selected to cover both pairing types.
 
+### Full Replication Requirements (pre-specified)
+
+The pilot established feasibility and directional effect size estimates.
+The full replication must satisfy the following design requirements before
+results can be interpreted as confirmatory:
+
+**Statistical power targets:**
+- Primary endpoint (H1, Agreeableness effect): d = 0.46 observed in pilot.
+  Required n ≈ 60 rounds per Agreeableness group per phase for 80% power
+  at α = 0.05 (two-sided). Full 16-pairing design at 20 rounds per pairing
+  yields n = 80 per group — sufficient.
+- H2 (Phase CG shift): d = 0.436 observed. Required n ≈ 65 per condition.
+  Full design at 160 rounds per phase exceeds this at the aggregate level.
+- Minimum rounds per pairing per phase: 20 (pilot). Recommended: 30 for
+  robust per-pairing estimates.
+
+**Neutral baseline condition (required addition):**
+Add a 5th persona condition — NB (Neutral Baseline) — using only the bare
+role prompt (seller/buyer with private information, no Big Five framing).
+Run NB x NB as a within-condition pairing in both phases.
+This enables determination of whether persona prompts increase or decrease
+calibration gaps relative to the underlying model's default negotiation
+behavior — a gap identified in peer review as necessary for causal
+interpretation of persona effects.
+
+**Neutral self-assessment condition (required addition):**
+For a subset of pairings, issue the post-negotiation self-assessment prompt
+from a neutral system context that does not carry the persona framing forward.
+Compare calibration gaps from persona-context vs. neutral-context assessments
+within the same negotiation rounds. This disentangles prompt-confidence
+priming effects on self-ratings from genuine behavioral calibration differences
+— the specific confound identified in peer review regarding the H1 reversal.
+
+**Prompt-confidence confound note:**
+The AP persona prompt contains explicitly confident language; WA contains
+deferential language. Self-ratings at assessment time may reflect this framing
+rather than (or in addition to) actual negotiation outcomes. The neutral
+self-assessment condition above is the designated test for this confound.
+Until that test is run, the H1 reversal should be interpreted as:
+*prompt-conditioned self-assessment behavior under current prompting, with
+prompt-confidence framing as a candidate mechanism alongside behavioral effects.*
+
 ### Environment
 
 ANTHROPIC_API_KEY must be set before running. The script reads it
