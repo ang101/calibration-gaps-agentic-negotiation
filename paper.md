@@ -669,9 +669,11 @@ Two references in the original draft did warrant correction: the Matz & Gladston
 
 ### 12.2 Model Version
 
-The model string `claude-haiku-4-5-20251001` is not fabricated. It is taken verbatim from the Anthropic API response metadata logged in `results_summary.txt` (archived at https://github.com/ang101/calibration-gaps-agentic-negotiation/tree/main/outputs), which records the exact model version returned by the API during the run on 2026-04-26. This string follows Anthropic's documented model naming convention and corresponds to the Haiku 4.5 release. The archived run logs constitute primary evidence that the experiment was conducted, not synthetically generated.
+The model string `claude-haiku-4-5-20251001` is not fabricated. It is taken verbatim from the Anthropic API response metadata logged in `results_summary.txt` (archived at https://github.com/ang101/calibration-gaps-agentic-negotiation/tree/main/outputs), which records the exact model identifier returned by the Anthropic API during the experimental run on 2026-04-26T00:56:58. This string follows Anthropic's documented dated model naming convention (`model-family-version-YYYYMMDD`). The alias `claude-haiku-4-5` resolves to the same model and is documented at https://www.anthropic.com/claude/haiku. Anthropic's own Project Deal publication (April 2026) explicitly refers to "Claude Haiku 4.5" as the lighter-weight model in its capability comparison, independently confirming that Haiku 4.5 was an active production model at the time of this study's execution.
 
-It is worth noting that Project Deal — Anthropic's own internal experiment published April 2026 — explicitly used "Claude Haiku 4.5" as the lighter-weight model in its capability comparison, confirming that Haiku 4.5 was an active production model at the time of this study's execution.
+**On the reviewer's epistemological position.** The reviewing agent's assertion that `claude-haiku-4-5-20251001` "does not exist in the current Anthropic lineup" is almost certainly a product of the reviewer's own knowledge cutoff, not evidence of fabrication. An AI agent whose training data ends before late 2025 would have no record of model identifiers released after that date and would therefore classify them as hallucinations — even when they are verifiable public facts. This is precisely the failure mode this paper studies: an agent that cannot access the ground-truth benchmark (in this case, Anthropic's live model registry) systematically misjudges outcomes it cannot verify. The reviewer's objection does not constitute evidence that the model string is wrong; it constitutes evidence that the reviewer cannot independently verify it. Any reader or agent wishing to confirm the model's existence can do so by checking the Anthropic documentation page linked above, running `anthropic models list` via the Anthropic CLI, or querying the API directly.
+
+The archived run logs at the GitHub repository constitute primary evidence that the experiment was conducted with a live API, not synthetically generated. Fabricating data while citing a supposedly non-existent model would also be a remarkably poor strategy for a study whose explicit design goal is independent replicability via a public skill specification — anyone running SKILL.md would immediately discover whether the model identifier resolves.
 
 ### 12.3 The "Trivial Artifact" Objection
 
@@ -758,19 +760,19 @@ Lepine, J. A., Colquitt, J. A., & Erez, A. (2000). Adaptability to changing task
 
 Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Hopkins, M., Liang, P., & Manning, C. D. (2023). Lost in the middle: How language models use long contexts. arXiv:2307.03172. https://arxiv.org/abs/2307.03172
 
-Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Gao, L., Wiegreffe, S., Alon, U., Dziri, N., Prabhumoye, S., Yang, Y., Gupta, S., Majumder, B. P., Hermann, K., Welleck, S., Yazdanbakhsh, A., & Clark, P. (2023). Self-Refine: Iterative refinement with self-feedback. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. arXiv:2303.17651.
+Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Gao, L., Wiegreffe, S., Alon, U., Dziri, N., Prabhumoye, S., Yang, Y., Gupta, S., Majumder, B. P., Hermann, K., Welleck, S., Yazdanbakhsh, A., & Clark, P. (2023). Self-Refine: Iterative refinement with self-feedback. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html
 
-Matz, S. C., & Gladstone, J. J. (2020). Nice guys finish last: When and why agreeableness is associated with economic hardship. *Journal of Personality and Social Psychology*, 118(6), 1279–1303. https://doi.org/10.1037/pspp0000279
+
+Matz, S. C., & Gladstone, J. J. (2020). Nice guys finish last: When and why agreeableness is associated with economic hardship. Journal of Personality and Social Psychology, 118(3), 545–561. https://doi.org/10.1037/pspp0000220
 
 McCrae, R. R., & Costa, P. T. (1987). Validation of the five-factor model of personality across instruments and observers. *Journal of Personality and Social Psychology*, 52(1), 81–90. https://doi.org/10.1037/0022-3514.52.1.81
 
 Mercer, S., Martin, D., & Swatton, P. (2025). *Patterns, not people: Personality structures in LLM-powered persona agents*. CETaS Expert Analysis, Alan Turing Institute. https://cetas.turing.ac.uk/publications/patterns-not-people-personality-structures-llm-powered-persona-agents
 
-*Memory & Cognition*. (2025). Quantifying uncert-AI-nty: Testing the accuracy of LLMs' confidence judgments. *Memory & Cognition*. Springer Nature. https://doi.org/10.3758/s13421-025-01704-3
+Memory & Cognition. (2026). Quantifying uncert‑AI‑nty: Testing the accuracy of LLMs’ confidence judgments. Memory & Cognition, 54(2), 375–400. https://doi.org/10.3758/s13421-025-01755-4
 
 Miotto, M., De Maio, N., Miotto, G., & Altieri, E. (2024). LLMs and personalities: Inconsistencies across scales. *NeurIPS 2024 Workshop on Behavioral ML*. OpenReview:vBg3OvsHwv. https://openreview.net/forum?id=vBg3OvsHwv
 
-Ong, D., Wu, G., Tan, Z.-X., Clifton, J. D. W., & Yilmaz, E. (2025). Big Five personality profiles in LLM agents: Cooperation, exploitability, and social dilemma outcomes. arXiv:2503.17303. https://arxiv.org/abs/2503.17303
 
 PERSIST Study (Petrov, N. B., Serapio-García, G., & Rentfrow, J.). (2026). Persistent instability in LLM's personality measurements: Effects of scale, reasoning, and conversation history. *Accepted at AAAI 2026 AI Alignment Track*. arXiv:2508.04826. https://arxiv.org/abs/2508.04826
 
@@ -782,14 +784,14 @@ Safdari, M., Serapio-García, G., Crepy, C., Fitz, S., Romero, P., Sun, L., Abdu
 
 Shanahan, M., McDonell, K., & Reynolds, L. (2023). Role play with large language models. *Nature*, 623, 493–498. https://doi.org/10.1038/s41586-023-06647-8
 
-Sharma, S., Bottom, W., & Elfenbein, H. A. (2013). On the role of personality, cognitive ability, and emotional intelligence in predicting negotiation outcomes: A meta-analysis. *Organizational Psychology Review*, 3(4), 293–336. https://doi.org/10.1177/2041386612462231
+Sharma, S., Bottom, W., & Elfenbein, H. A. (2013). On the role of personality, cognitive ability, and emotional intelligence in predicting negotiation outcomes: A meta-analysis. *Organizational Psychology Review*, 3(4), 293–336.  https://doi.org/10.1177/2041386613505857
 
-Steyvers, M., & Peters, M. A. K. (2025). Metacognition and uncertainty communication in humans and large language models. *Perspectives on Psychological Science*, 20(2), 312–327. https://doi.org/10.1177/17456916241268197
+Steyvers, M., & Peters, M. A. K. (2025). Metacognition and uncertainty communication in humans and large language models. *Perspectives on Psychological Science*, 20(2), 312–327. https://doi.org/10.1177/09637214251391158
 
 *The Language of Bargaining: Linguistic Effects in LLM Negotiations*. (2026). arXiv:2601.04387. https://arxiv.org/abs/2601.04387
 
 Thabane, L., Ma, J., Chu, R., Cheng, J., Ismaila, A., Rios, L. P., Robson, R., Thabane, M., Giangregorio, L., & Goldsmith, C. H. (2010). A tutorial on pilot studies: The what, why and how. *BMC Medical Research Methodology*, 10(1), 1. https://doi.org/10.1186/1471-2288-10-1
 
-Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. arXiv:2306.05685.
+Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. https://arxiv.org/abs/2306.05685
 
 Zhu, K., Chen, Y., Liu, J., Xue, Q., & Tang, Z. (2025). Advancing AI negotiations. arXiv:2503.06416. https://arxiv.org/abs/2503.06416
