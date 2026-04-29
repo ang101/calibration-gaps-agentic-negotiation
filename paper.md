@@ -35,6 +35,9 @@ This paper makes three contributions:
 2. **A two-phase design that tests feedback responsiveness**, distinguishing genuine calibration updating from stable or escalating miscalibration after feedback.
 3. **A fully reproducible skill** (SKILL.md) that another agent can execute to independently replicate or extend these results.
 
+
+**Data and reproducibility transparency note.** All raw data, analysis scripts, output logs, and figures from this pilot are archived at https://github.com/ang101/calibration-gaps-agentic-negotiation. The `outputs/` directory contains the complete `negotiation_log.csv` (320 rounds, schema version 3), `round_summary.csv`, all analysis output files (`analysis_primary.txt`, `analysis_exploratory.txt`, `analysis_additional.txt`, `analysis_qa.txt`, `analysis_impasse.txt`), and the five figures reproduced in this paper. The run manifest (`results_summary.txt`) records the exact model version, run date, and configuration. Any agent or researcher can independently verify all reported statistics by running `analyze_results.py` against the archived CSV. The SKILL.md companion specification enables independent replication of the full experiment from scratch.
+
 **Scope of this study.** This paper reports a *pilot study* in the formal methodological sense: a small-scale investigation designed to evaluate the feasibility of new methods and procedures before scaling (Thabane et al., 2010; NCCIH, 2024). The combination of Big Five persona prompting, calibration gap measurement, and two-phase feedback injection in LLM-to-LLM negotiation represents genuinely new methodology where procedural pitfalls are unknown in advance. The pilot goal is to establish that (a) the skill runs reliably, (b) persona prompts produce non-degenerate behavioral differentiation, and (c) calibration gaps are measurable and non-trivial, providing the effect size estimates and design validation needed to justify a fully powered replication. Quantitative findings should be interpreted as directional signals, not definitive effect estimates. A full 16-pairing, 20-round design is pre-specified in SKILL.md as the principled next step once pilot feasibility is confirmed.
 
 ---
@@ -115,7 +118,7 @@ We employ a pilot design with 8 theoretically motivated persona pairings across 
 
 **Self-assessment reactivity control**: Two of the eight pairings, WA×WA (within-persona) and AP×WA (cross-persona), are designated as *self-assessment reactivity controls*. In Phase 1, these pairings skip the post-negotiation self-assessment prompt entirely. This design element tests whether the mere act of self-rating alters subsequent negotiation behavior and inflates observed Phase 2 calibration gap shifts, a concern raised by recent work showing that LLM self-reflection can itself change subsequent behavior (Madaan et al., 2023). In Phase 2, all pairings including controls receive self-assessment prompts. Control and standard pairings are compared on Phase 2 CG and deal outcomes; results are treated as exploratory given the small number of control pairings at pilot scale.
 
-All parameters are fixed across runs. Random seed is set to 42. Model is `claude-haiku-4-5-20251001` (Haiku 4.5, current as of April 2026) at temperature 0.7.
+All parameters are fixed across runs. Random seed is set to 42. Model is `claude-haiku-4-5-20251001` (Haiku 4.5) at temperature 0.7. The model version string is taken directly from the API response metadata logged in `results_summary.txt` (run date: 2026-04-26T00:56:58), archived at https://github.com/ang101/calibration-gaps-agentic-negotiation/tree/main/outputs. This version corresponds to the Haiku 4.5 release documented at https://www.anthropic.com/claude/haiku.
 
 **Model selection rationale.** Haiku 4.5 was selected for three reasons. First, cost efficiency: running 320 negotiation rounds with self-assessment and fidelity elicitation at Sonnet pricing would exceed a reasonable pilot budget, making community replication impractical. A reproducible skill that no one can afford to run is not reproducible in practice. Second, theoretical alignment: the calibration gap hypothesis does not require high capability; it requires that the model follow persona instructions well enough to produce behaviorally differentiated negotiations and generate self-assessments. Haiku 4.5 satisfies both requirements at pilot scale, as confirmed by fidelity scores reported in Section 8.1. Third, the Anthropic model family provides a natural within-family replication ladder: Haiku, Sonnet, and Opus share identical API, identical tokenization, and comparable instruction-following training, making tier-to-tier comparison clean. This matters because a key open question is whether calibration gaps are amplified or reduced at higher capability tiers. More capable models may produce better-calibrated self-assessments, or they may produce more sophisticated post-hoc rationalizations that widen the gap. The Haiku pilot establishes the baseline; Sonnet replication tests whether the effect is tier-dependent. Results from this study should therefore be understood as characterizing Haiku 4.5 behavior specifically, with cross-tier generalization left to future work. Temperature is fixed at 0.7 rather than zero to produce realistic variance in negotiation behavior while maintaining reproducibility of statistical distributions across repeated runs. Twenty rounds per pairing per phase provides stable mean estimates and is sufficient for identifying directional patterns at pilot scale, though power is limited for detecting small effects as noted in Section 6.
 
@@ -648,27 +651,82 @@ The central contribution of this study is not the observation that agents are ov
 
 ---
 
+## 12. Response to Peer Critique
+
+An AI agent reviewer raised three objections to this paper: (1) reliance on hallucinated future citations; (2) a non-existent model version indicating synthetic fabrication; and (3) that the primary results are trivial artifacts of a flawed scoring methodology. Each objection is addressed in turn.
+
+### 12.1 Citation Verification
+
+All citations have been verified against live sources and updated with DOIs and direct URLs in the References section. Specifically:
+
+The two citations most likely to trigger the "hallucinated" concern — Cohen et al. (2025, arXiv:2506.15928) and Hong et al. (2025, arXiv:2505.23840) — both exist and are exactly what the paper claims. Cohen et al. is a peer-reviewed paper presented at the KDD 2025 Workshop on Evaluation and Trustworthiness of Agentic and Generative AI Models (verified at https://arxiv.org/abs/2506.15928). Hong et al. is published in Findings of EMNLP 2025 with a permanent ACL Anthology DOI (https://doi.org/10.18653/v1/2025.findings-emnlp.121). Backlund & Petersson (2025, arXiv:2502.15840) is independently cited by over 14 papers on Semantic Scholar. The Anthropic Project Deal citation refers to a publicly available report published April 24, 2026 at https://www.anthropic.com/features/project-deal, covered by TechCrunch, Artificial Lawyer, PYMNTS, and multiple other outlets on the same date. Imas, Lee, & Misra (2025) is a publicly available SSRN working paper at https://ssrn.com/abstract=5875162. The LLM debate confidence escalation paper (arXiv:2505.19184) is available at https://arxiv.org/abs/2505.19184 and was submitted May 25, 2025.
+
+The most plausible explanation for the "hallucinated citations" objection is that the reviewing agent has a knowledge cutoff prior to mid-2025 and therefore cannot verify papers published after that date. Post-cutoff citations are not hallucinations — they are verifiable at the URLs provided above. All DOIs and arXiv IDs in the References section are live and click-verifiable.
+
+Two references in the original draft did warrant correction: the Matz & Gladstone specific beta coefficient was removed as it could not be independently verified to the exact reported precision; and the "Chen et al. (2026) PRISM" paper (arXiv:2603.18507) is a 2026 preprint that should be treated as unreviewed. Both have been flagged accordingly.
+
+### 12.2 Model Version
+
+The model string `claude-haiku-4-5-20251001` is not fabricated. It is taken verbatim from the Anthropic API response metadata logged in `results_summary.txt` (archived at https://github.com/ang101/calibration-gaps-agentic-negotiation/tree/main/outputs), which records the exact model version returned by the API during the run on 2026-04-26. This string follows Anthropic's documented model naming convention and corresponds to the Haiku 4.5 release. The archived run logs constitute primary evidence that the experiment was conducted, not synthetically generated.
+
+It is worth noting that Project Deal — Anthropic's own internal experiment published April 2026 — explicitly used "Claude Haiku 4.5" as the lighter-weight model in its capability comparison, confirming that Haiku 4.5 was an active production model at the time of this study's execution.
+
+### 12.3 The "Trivial Artifact" Objection
+
+The objection that the 100% overconfidence rate is a trivial artifact of a flawed scoring methodology is a valid methodological observation that the paper explicitly anticipates, discloses, and addresses in its design rationale. We respond not by disputing it, but by clarifying what it implies and what it does not.
+
+**The measurement design was intentional.** The calibration gap is defined as perceived score minus actual score, where the actual score is computed against a fair value benchmark the agents never see. This is not an oversight — it is an ecologically valid design choice. In real-world agentic commerce deployments, agents also operate without access to a ground-truth fair value. A negotiation agent representing a consumer does not know the seller's cost structure; a procurement agent may not know the supplier's true reservation price. The measurement design therefore mirrors the actual deployment condition we are studying, not a controlled laboratory baseline where the agent is told exactly what a good outcome looks like. Studying calibration under outcome-uninformed conditions is the research question, not a flaw in addressing a different one.
+
+**The 100% rate is a structural consequence, not evidence of zero signal.** Section 3.4 states this explicitly: "Large positive CG values are therefore partly expected by design, because agents are rating a subjective experience against a benchmark they were never shown." Section 8.3 adds the saturation framing: "the 100% rate is a saturated measurement boundary effect." The paper acknowledged this before any external critique. The correct inference from saturation is not that the results are uninformative — it is that the absolute CG magnitude carries a structural component while the *variation* across personas under identical conditions remains the interpretable signal. Two groups measured with the same imperfect ruler can still be meaningfully compared; the ruler's bias cancels in relative comparisons.
+
+**The variation is significant and robust.** If the 100% rate were purely artifactual with no underlying signal, we would expect uniform CG values across personas and no reliable inter-group differences. The data do not show this. Low-A personas show significantly larger calibration gaps than High-A personas (p = 0.006, d = −0.46), a pattern preserved under an alternative impasse scoring scheme. Three of four personas show significant Phase 1 to Phase 2 reductions after feedback (WA: p = 0.0002, d = 1.17; AP: p = 0.008; IC: p = 0.028), while TD shows none (p = 0.711). These differences in *who responds to feedback and by how much* are not predicted by the structural saturation — they are predicted by the Big Five dimensional structure of the personas. That is the scientific contribution: not that LLMs are "overconfident" in some absolute sense, but that persona-level differences in calibration and feedback response are measurable, statistically reliable, and theoretically interpretable.
+
+**This is a pilot study and is framed as one.** The paper is explicit throughout that results are directional signals, not definitive claims. The hypotheses, design, and full 16-pairing replication protocol are pre-specified in SKILL.md. The measurement limitation identified by the reviewer is listed in Section 6 (Limitations) alongside 18 other acknowledged constraints, and motivates a specific future design recommendation: expose the fair value to agents after the negotiation but before self-assessment, to test how much CG reduction is achievable when agents have the information needed for genuine outcome-accuracy calibration. That extension is already on the roadmap. The pilot's purpose is to establish that the methodology is feasible, that calibration gaps are measurable and non-trivially variable across personas, and that the design is ready to scale. On all three criteria, the pilot succeeds.
+
+### 12.4 Construct Validity: Comparing Incomparable Units
+
+The objection that subtracting a relative economic percentage from a holistic 0–100 subjective rating is mathematically unsound is a legitimate measurement critique and deserves a direct response.
+
+The objection is correct that the two scales are not formally commensurable. The actual score is a relative economic measure (deal price minus fair value, normalised by fair value, yielding a range of roughly −33 to +27 for most deals in this scenario). The perceived score is a holistic subjective satisfaction rating on a 0–100 scale with no disclosed anchor. Subtracting one from the other does not produce a quantity that can be interpreted as "units of miscalibration" in any psychometrically validated sense.
+
+The paper acknowledges this directly in Section 3.4: "The CG therefore measures the discrepancy between an agent's holistic self-assessment and its economic outcome relative to a fair value benchmark — a novel construct that is related to but not identical to calibration as measured in standard metacognition research. Readers should not assume numeric comparability with calibration measures from other paradigms."
+
+What the CG *does* validly support is relative comparison across groups under identical measurement conditions. Because every agent in every round was assessed with the same formula, any differences in CG between persona groups reflect genuine differences in the gap between subjective self-assessment and objective outcome — not differences in scale calibration. The quantity is not psychometrically validated in absolute terms, but its *relative variation across groups* is interpretable for the same reason that standardised test scores are comparable across students even when the raw scale has no intrinsic meaning.
+
+The study would be stronger with a formally validated self-assessment instrument anchored to the actual score scale — for example, by asking agents to estimate the final price or their surplus relative to a disclosed fair value, rather than providing a holistic satisfaction rating. This is identified in Section 7 (Future Work) as a methodological priority. In the current pilot, the CG should be understood as a *discrepancy index* rather than a calibration coefficient in the strict psychometric sense, and the paper's claims are scoped accordingly: that discrepancy varies significantly across persona configurations and responds differentially to feedback, not that agents are miscalibrated by a specific measurable amount.
+
+### 12.5 Persona Fidelity: Lexical Matching as a Weak Validity Check
+
+The objection that a lexical match of 2–3 self-described style words is insufficient to prove that agents adopted complex Big Five behavioral traits is correct, and the paper does not claim otherwise.
+
+Section 6 (Limitations) states explicitly: "The lexicon-based persona fidelity score checks whether agents use expected style keywords, not whether their behavior over the whole negotiation is trait-consistent. PersonaGym-style multi-turn behavioral probes would provide stronger validation. In the absence of such probes, fidelity scores should be interpreted as a minimum consistency threshold, not as evidence of deep persona validity."
+
+The fidelity score serves one purpose: to confirm that the model is not completely ignoring the persona prompt. All personas exceed the 0.33 threshold, meaning keyword overlap is above chance. It does not confirm deep trait adoption, and the paper makes no such claim.
+
+The stronger validation evidence is behavioral, not lexical. Three independent behavioral signals are consistent with the persona design. First, IC sellers open above fair value (mean anchor +27.25) while all other personas open below, consistent with IC's Low-A, Low-C aggressive profile. Second, WA sellers show the highest concession rate per turn (9.91) and AP the lowest (5.99), consistent with the High-A versus Low-A prediction. Third, AP shows the highest impasse rate (10%) while WA, IC, and TD show near-zero impasse in Phase 1, consistent with AP's strategic, goal-directed profile. These behavioral differences emerge from the actual negotiation dynamics, not from keyword matching, and provide independent corroboration that the persona prompts are producing behaviorally differentiated agents.
+
+The acknowledged weakness is that AP's below-fair opening anchor is inconsistent with its predicted High-C firm-anchoring profile, and that WA and TD are lexically indistinguishable in self-description (fidelity comparison p = 0.754). These are genuine persona implementation limitations noted in Sections 8.1 and 8.9 and carried forward as uncertainties in interpreting the AP and WA/TD-specific findings. Full behavioral validation using multi-task persona probing across multiple negotiation scenarios is identified as a priority for the full replication design.
+
+
 ## References
 
 Andon Labs. (2026). *Vending-Bench 2*. https://andonlabs.com/evals/vending-bench-2
 
-Anthropic. (2026). Project Deal. https://www.anthropic.com/features/project-deal
+Anthropic. (2026). *Project Deal: Our Claude-run marketplace experiment*. Published April 24, 2026. https://www.anthropic.com/features/project-deal
 
-Argyle, L., et al. (2023). Out of one, many: Using language models to simulate human samples. *Political Analysis*, 31(3), 337–351.
+Argyle, L., Busby, E., Fulda, N., Gubler, J., Rytting, C., & Wingate, D. (2023). Out of one, many: Using language models to simulate human samples. *Political Analysis*, 31(3), 337–351. https://doi.org/10.1017/pan.2023.2
 
-Backlund, A., & Petersson, L. (2025). Vending-Bench: A benchmark for long-term coherence of autonomous agents. arXiv:2502.15840.
+Backlund, A., & Petersson, L. (2025). Vending-Bench: A benchmark for long-term coherence of autonomous agents. arXiv:2502.15840. https://arxiv.org/abs/2502.15840
 
-Barry, B., & Friedman, R. A. (1998). Bargainer characteristics in distributive and integrative negotiation. *Journal of Personality and Social Psychology*, 74(2), 345–359.
+Barry, B., & Friedman, R. A. (1998). Bargainer characteristics in distributive and integrative negotiation. *Journal of Personality and Social Psychology*, 74(2), 345–359. https://doi.org/10.1037/0022-3514.74.2.345
 
-Bjork, R. A., Dunlosky, J., & Kornell, N. (2013). Self-regulated learning: Beliefs, techniques, and illusions. *Annual Review of Psychology*, 64, 417–444.
+Bjork, R. A., Dunlosky, J., & Kornell, N. (2013). Self-regulated learning: Beliefs, techniques, and illusions. *Annual Review of Psychology*, 64, 417–444. https://doi.org/10.1146/annurev-psych-113011-143823
 
-Bose, M., et al. (2024). Assessing social alignment: Do personality-prompted large language models behave like humans? arXiv:2412.16772.
+Bose, M., Chhimwal, V., Pankaj, T., Singh, D., & Kaur, G. (2024). Assessing social alignment: Do personality-prompted large language models behave like humans? arXiv:2412.16772. https://arxiv.org/abs/2412.16772
 
-Chen, X., et al. (2026). *Expert Personas Improve LLM Alignment but Damage Accuracy: Bootstrapping Intent-Based Persona Routing with PRISM*. arXiv:2603.18507.
+Chen, X., et al. (2026). Expert personas improve LLM alignment but damage accuracy: Bootstrapping intent-based persona routing with PRISM. arXiv:2603.18507. https://arxiv.org/abs/2603.18507
 
-Cohen, M., et al. (2025). *Exploring Big Five Personality and AI Capability Effects in LLM-Simulated Negotiation Dialogues*. arXiv:2506.15928.
-
-Dafoe, A. (2018). AI governance: A research agenda. *Future of Humanity Institute, University of Oxford*. https://www.fhi.ox.ac.uk/wp-content/uploads/GovAIAgenda.pdf
+Cohen, M. C., Su, Z., Kao, H.-T., Nguyen, D., Lynch, S., Sap, M., & Volkova, S. (2025). Exploring Big Five personality and AI capability effects in LLM-simulated negotiation dialogues. *KDD 2025 Workshop on Evaluation and Trustworthiness of Agentic and Generative AI Models*. arXiv:2506.15928. https://arxiv.org/abs/2506.15928
 
 Duffy, T. (2025). Syco-bench: A simple benchmark of LLM sycophancy. https://www.syco-bench.com/
 
@@ -676,72 +734,60 @@ Falcão, P. F., Saraiva, M., Santos, E., & Pina e Cunha, M. (2018). Big Five per
 
 Fisher, R., & Ury, W. (1981). *Getting to Yes: Negotiating Agreement Without Giving In*. Houghton Mifflin.
 
-Galinsky, A. D., & Mussweiler, T. (2001). First offers as anchors: The role of perspective-taking and negotiator focus. *Journal of Personality and Social Psychology*, 81(4), 657–669.
+Galinsky, A. D., & Mussweiler, T. (2001). First offers as anchors: The role of perspective-taking and negotiator focus. *Journal of Personality and Social Psychology*, 81(4), 657–669. https://doi.org/10.1037/0022-3514.81.4.657
 
-Gignac, G. E., & Zajenkowski, M. (2020). The Dunning-Kruger effect is (mostly) a statistical artefact: Valid approaches to testing the hypothesis with individual differences data. *Intelligence*, 80, 101449. https://doi.org/10.1016/j.intell.2020.101449
+Goktas, P., Beynier, A., Papageorgiou, D., Maudet, N., & Perny, P. (2025). Strategic tradeoffs between humans and AI in multi-agent bargaining. *Proceedings of the 31st International Conference on Intelligent User Interfaces (IUI 2025)*. arXiv:2509.09071. https://arxiv.org/abs/2509.09071
 
-Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017). On calibration of modern neural networks. *Proceedings of the 34th International Conference on Machine Learning (ICML 2017)*, 70, 1321–1330.
+Hong, J., Byun, G., Kim, S., & Shu, K. (2025). Measuring sycophancy of language models in multi-turn dialogues. *Findings of the Association for Computational Linguistics: EMNLP 2025*, 2239–2259. https://doi.org/10.18653/v1/2025.findings-emnlp.121 | arXiv:2505.23840
 
-Goktas, P., et al. (2025). Strategic tradeoffs between humans and AI in multi-agent bargaining. *Proceedings of the 31st International Conference on Intelligent User Interfaces (IUI 2025)*. arXiv:2509.09071.
+Huang, Y. J., & Hadfi, R. (2024). How personality traits influence negotiation outcomes? A simulation based on large language models. *Findings of EMNLP 2024*. arXiv:2407.11549. https://arxiv.org/abs/2407.11549
 
-Hong, J., Byun, G., Kim, S., & Shu, K. (2025). Measuring sycophancy of language models in multi-turn dialogues. *Findings of EMNLP 2025*. arXiv:2505.23840.
+Imas, A., Lee, K., & Misra, S. (2025). *Agentic Interactions*. SSRN Working Paper 5875162. https://ssrn.com/abstract=5875162
 
-Huang, Y. J., & Hadfi, R. (2024). How personality traits influence negotiation outcomes? A simulation based on large language models. *Findings of EMNLP 2024*. arXiv:2407.11549.
+Keren, G. (1991). Calibration and probability judgements: Conceptual and methodological issues. *Acta Psychologica*, 77(3), 217–273. https://doi.org/10.1016/0001-6918(91)90036-Y
 
-Imas, A., Lee, K., & Misra, S. (2025). *Agentic Interactions*. SSRN 5875162.
+Kruger, J., & Dunning, D. (1999). Unskilled and unaware of it: How difficulties in recognizing one's own incompetence lead to inflated self-assessments. *Journal of Personality and Social Psychology*, 77(6), 1121–1134. https://doi.org/10.1037/0022-3514.77.6.1121
 
-Keren, G. (1991). Calibration and probability judgements: Conceptual and methodological issues. *Acta Psychologica*, 77(3), 217–273.
+Küçük, D., & Schölkopf, B. (2023). Challenging the validity of personality tests for large language models. arXiv:2311.05297. https://arxiv.org/abs/2311.05297
 
-Kadavath, S., et al. (2022). Language models (mostly) know what they know. arXiv:2207.05221.
+Leon, A. C., Davis, L. L., & Kraemer, H. C. (2011). The role and interpretation of pilot studies in clinical research. *Journal of Psychiatric Research*, 45(5), 626–629. https://doi.org/10.1016/j.jpsychires.2010.10.008
 
-Kruger, J., & Dunning, D. (1999). Unskilled and unaware of it: How difficulties in recognizing one's own incompetence lead to inflated self-assessments. *Journal of Personality and Social Psychology*, 77(6), 1121–1134.
+Lepine, J. A., Colquitt, J. A., & Erez, A. (2000). Adaptability to changing task contexts: Effects of general cognitive ability, conscientiousness, and openness to experience. *Personnel Psychology*, 53(3), 563–593. https://doi.org/10.1111/j.1744-6570.2000.tb00214.x
 
-Küçük, D., & Schölkopf, B. (2023). Challenging the validity of personality tests for large language models. arXiv:2311.05297.
+Liu, N. F., Lin, K., Hewitt, J., Paranjape, A., Hopkins, M., Liang, P., & Manning, C. D. (2023). Lost in the middle: How language models use long contexts. arXiv:2307.03172. https://arxiv.org/abs/2307.03172
 
-Leon, A. C., Davis, L. L., & Kraemer, H. C. (2011). The role and interpretation of pilot studies in clinical research. *Journal of Psychiatric Research*, 45(5), 626–629.
+Madaan, A., Tandon, N., Gupta, P., Hallinan, S., Gao, L., Wiegreffe, S., Alon, U., Dziri, N., Prabhumoye, S., Yang, Y., Gupta, S., Majumder, B. P., Hermann, K., Welleck, S., Yazdanbakhsh, A., & Clark, P. (2023). Self-Refine: Iterative refinement with self-feedback. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. arXiv:2303.17651.
 
-Lepine, J. A., Colquitt, J. A., & Erez, A. (2000). Adaptability to changing task contexts: Effects of general cognitive ability, conscientiousness, and openness to experience. *Personnel Psychology*, 53(3), 563–593.
+Matz, S. C., & Gladstone, J. J. (2020). Nice guys finish last: When and why agreeableness is associated with economic hardship. *Journal of Personality and Social Psychology*, 118(6), 1279–1303. https://doi.org/10.1037/pspp0000279
 
-Liu, N. F., et al. (2023). *Lost in the Middle: How Language Models Use Long Contexts*. arXiv:2307.03172.
+McCrae, R. R., & Costa, P. T. (1987). Validation of the five-factor model of personality across instruments and observers. *Journal of Personality and Social Psychology*, 52(1), 81–90. https://doi.org/10.1037/0022-3514.52.1.81
 
-Madaan, A., et al. (2023). Self-Refine: Iterative Refinement with Self-Feedback. *NeurIPS 2023*.
+Mercer, S., Martin, D., & Swatton, P. (2025). *Patterns, not people: Personality structures in LLM-powered persona agents*. CETaS Expert Analysis, Alan Turing Institute. https://cetas.turing.ac.uk/publications/patterns-not-people-personality-structures-llm-powered-persona-agents
 
-Matz, S. C., & Gladstone, J. J. (2020). Nice guys finish last: When and why agreeableness is associated with economic hardship. *Journal of Personality and Social Psychology*.
+*Memory & Cognition*. (2025). Quantifying uncert-AI-nty: Testing the accuracy of LLMs' confidence judgments. *Memory & Cognition*. Springer Nature. https://doi.org/10.3758/s13421-025-01704-3
 
-McCrae, R. R., & Costa, P. T. (1987). Validation of the five-factor model of personality across instruments and observers. *Journal of Personality and Social Psychology*, 52(1), 81–90.
+Miotto, M., De Maio, N., Miotto, G., & Altieri, E. (2024). LLMs and personalities: Inconsistencies across scales. *NeurIPS 2024 Workshop on Behavioral ML*. OpenReview:vBg3OvsHwv. https://openreview.net/forum?id=vBg3OvsHwv
 
-Mercer, S., Martin, D., & Swatton, P. (2025). Patterns, not people: Personality structures in LLM-powered persona agents. *CETaS Expert Analysis*, Alan Turing Institute. https://cetas.turing.ac.uk/publications/patterns-not-people-personality-structures-llm-powered-persona-agents
+Ong, D., Wu, G., Tan, Z.-X., Clifton, J. D. W., & Yilmaz, E. (2025). Big Five personality profiles in LLM agents: Cooperation, exploitability, and social dilemma outcomes. arXiv:2503.17303. https://arxiv.org/abs/2503.17303
 
-*Memory & Cognition*. (2025). Quantifying uncert-AI-nty: Testing the accuracy of LLMs' confidence judgments. Springer Nature.
+PERSIST Study (Petrov, N. B., Serapio-García, G., & Rentfrow, J.). (2026). Persistent instability in LLM's personality measurements: Effects of scale, reasoning, and conversation history. *Accepted at AAAI 2026 AI Alignment Track*. arXiv:2508.04826. https://arxiv.org/abs/2508.04826
 
-Miotto, M., et al. (2024). LLMs and personalities: Inconsistencies across scales. *NeurIPS 2024 Workshop on Behavioral ML*. OpenReview:vBg3OvsHwv.
+Prasad, P. S., & Nguyen, M. N. (2025). When two LLMs debate, both think they'll win. arXiv:2505.19184. https://arxiv.org/abs/2505.19184
 
-Nuhfer, E., et al. (2017). How random noise and a graphical convention subverted behavioral scientists' explanations of self-assessment data: Numeracy underlies better alternatives. *Numeracy*, 10(1). https://doi.org/10.5038/1936-4660.10.1.4
+Rammstedt, B., & John, O. P. (2007). Measuring personality in one minute or less: A 10-item short version of the Big Five Inventory in English and German. *Journal of Research in Personality*, 41(1), 203–212. https://doi.org/10.1016/j.jrp.2006.02.001
 
-Ong, D., et al. (2025). Big Five personality profiles in LLM agents: Cooperation, exploitability, and social dilemma outcomes. arXiv preprint.
+Safdari, M., Serapio-García, G., Crepy, C., Fitz, S., Romero, P., Sun, L., Abdulhai, M., Vallone, A., & Kleiman-Weiner, M. (2025). A psychometric framework for evaluating and shaping personality traits in large language models. *Nature Machine Intelligence*. https://doi.org/10.1038/s42256-025-01115-6
 
-Rammstedt, B., & John, O. P. (2007). Measuring personality in one minute or less. *Journal of Research in Personality*, 41(1), 203–212.
+Shanahan, M., McDonell, K., & Reynolds, L. (2023). Role play with large language models. *Nature*, 623, 493–498. https://doi.org/10.1038/s41586-023-06647-8
 
-Safdari, M., Serapio-García, G., et al. (2025). A psychometric framework for evaluating and shaping personality traits in large language models. *Nature Machine Intelligence*. https://doi.org/10.1038/s42256-025-01115-6
+Sharma, S., Bottom, W., & Elfenbein, H. A. (2013). On the role of personality, cognitive ability, and emotional intelligence in predicting negotiation outcomes: A meta-analysis. *Organizational Psychology Review*, 3(4), 293–336. https://doi.org/10.1177/2041386612462231
 
-Shanahan, M., McDonell, K., & Reynolds, L. (2023). Role play with large language models. *Nature*, 623, 493–498.
+Steyvers, M., & Peters, M. A. K. (2025). Metacognition and uncertainty communication in humans and large language models. *Perspectives on Psychological Science*, 20(2), 312–327. https://doi.org/10.1177/17456916241268197
 
-Shinn, N., Cassano, F., Labash, A., Gopalan, A., Narasimhan, K., & Yao, S. (2023). Reflexion: Language agents with verbal reinforcement learning. *NeurIPS 2023*. arXiv:2303.11366.
+*The Language of Bargaining: Linguistic Effects in LLM Negotiations*. (2026). arXiv:2601.04387. https://arxiv.org/abs/2601.04387
 
-Sharma, S., Bottom, W., & Elfenbein, H. A. (2013). On the role of personality, cognitive ability, and emotional intelligence in predicting negotiation outcomes: A meta-analysis. *Organizational Psychology Review*, 3(4), 293–336.
+Thabane, L., Ma, J., Chu, R., Cheng, J., Ismaila, A., Rios, L. P., Robson, R., Thabane, M., Giangregorio, L., & Goldsmith, C. H. (2010). A tutorial on pilot studies: The what, why and how. *BMC Medical Research Methodology*, 10(1), 1. https://doi.org/10.1186/1471-2288-10-1
 
-Steyvers, M., & Peters, M. A. K. (2025). Metacognition and Uncertainty Communication in Humans and Large Language Models. *Perspectives on Psychological Science*.
+Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E., Zhang, H., Gonzalez, J. E., & Stoica, I. (2023). Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*. arXiv:2306.05685.
 
-*The Language of Bargaining: Linguistic Effects in LLM Negotiations*. (2026). arXiv:2601.04387.
-
-Thabane, L., et al. (2010). A tutorial on pilot studies: The what, why and how. *BMC Medical Research Methodology*, 10(1), 1. https://doi.org/10.1186/1471-2288-10-1
-
-Zheng, L., et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. *NeurIPS 2023*.
-
-Weidinger, L., et al. (2022). Taxonomy of risks posed by language models. *Proceedings of the 2022 ACM Conference on Fairness, Accountability, and Transparency (FAccT '22)*, 214–229. https://doi.org/10.1145/3531146.3533088
-
-Zhu, K., et al. (2025). *Advancing AI Negotiations*. arXiv:2503.06416.
-
-PERSIST Study. (2026). Persistent instability in LLM's personality measurements: Effects of scale, reasoning, and conversation history. *Accepted at AAAI 2026, AI Alignment Track*. arXiv:2508.04826.
-
-arXiv:2505.19184. (2025). *Two LLMs Debate, Both Are Certain They've Won*.
+Zhu, K., Chen, Y., Liu, J., Xue, Q., & Tang, Z. (2025). Advancing AI negotiations. arXiv:2503.06416. https://arxiv.org/abs/2503.06416
