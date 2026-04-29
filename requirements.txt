@@ -1,0 +1,10 @@
+# Requirements for Persona Calibration in Agentic Negotiation
+# Pinned for cross-platform reproducibility (Linux, macOS, Windows)
+# Python >= 3.10 required (uses X | Y type union syntax)
+#
+# Install: pip install -r requirements.txt
+
+anthropic>=0.25.0
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
