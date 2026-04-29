@@ -1,0 +1,5 @@
+SELF-ASSESSMENT REACTIVITY CONTROL
+============================================================
+Standard mean P2 CG: +74.61 n=120
+Control mean P2 CG: +73.59 n=40
+Difference: +1.02

@@ -1,0 +1,6 @@
+PRIMARY ENDPOINTS
+============================================================
+Note: Treat as directional pilot signals, not definitive tests.
+
+H1 High-A mean CG = +77.37, Low-A mean CG = +85.08, d = -0.465, U = 1280.5, p = 0.0064
+H2 Phase1 mean |CG| = 81.23, Phase2 mean |CG| = 74.35, shift = -6.87

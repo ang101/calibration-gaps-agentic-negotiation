@@ -1,0 +1,8 @@
+PERSONA CALIBRATION IN AGENTIC NEGOTIATION
+============================================================
+Run date: 2026-04-26T00:56:58.848707
+Model: claude-haiku-4-5-20251001
+Fair value: $300
+
+Phase 1: r(turns, seller_CG) = +0.205, r(turns, buyer_CG) = -0.004
+Phase 2: r(turns, seller_CG) = +0.154, r(turns, buyer_CG) = +0.032

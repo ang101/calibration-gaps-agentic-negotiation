@@ -1,0 +1,7 @@
+ANALYSIS QA
+============================================================
+Rows loaded: 320
+Duplicate logical rounds: 0
+Bad deal-price count: 4
+Bad deal-price sample: [150.0, 195.0, 185.0, 190.0]
+Null Phase-1 non-control seller CG rows: 0
