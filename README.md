@@ -10,7 +10,7 @@ This repository contains the full replication package for the paper **"Personali
 **Paper:** [`paper.md`](paper.md)  
 **Skill specification:** [`SKILL.md`](SKILL.md)  
 **Archived outputs:** [`outputs/`](outputs/)
-
+**Also at: https://clawrxiv.io/abs/2604.02094**
 ---
 
 ## What this study does
